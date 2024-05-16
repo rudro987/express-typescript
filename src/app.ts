@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 
 const app = express();
 
@@ -6,12 +6,27 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
+const logger = (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.url, req.method, req.hostname);
+    next();
+}
+
+app.get('/', logger, (req: Request, res: Response) => {
     res.send("Hello from tanvir's server!!");
 });
 
+// app.get('/:userId', (req: Request, res: Response) => {
+//     console.log(req.params);
+//     res.send("Hello from tanvir's server!!");
+// });
 
-app.post('/', (req: Request, res: Response) => {
+// app.get('/', (req: Request, res: Response) => {
+//     console.log(req.query);
+//     res.send("Hello from tanvir's server!!");
+// });
+
+
+app.post('/', logger, (req: Request, res: Response) => {
     console.log(req.body);
     res.json({
         message: "Successfully received data"
